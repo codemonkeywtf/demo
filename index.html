@@ -14,40 +14,41 @@
       integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
       crossorigin="anonymous"
     ></script>
-    <style>
-      beadle-button button {
-        margin: 2px;
-      }
-    </style>
+    <style></style>
 
     <script type="module">
       import { LitElement, html, css } from 'https://jspm.dev/lit-element@2'
       class BeadleButton extends LitElement {
         static get styles() {
           return css`
-            p {
-              color: green;
+            ::slotted(p) {
+              color: red;
+            }
+            ::slotted(button) {
+              margin: 2px;
             }
           `
         }
+
+        /*createRenderRoot() {
+          return this
+        }*/
+
         render() {
           return html`
             <slot name="hello">
               <p>Hello World!</p>
             </slot>
 
-            <slot><button type="button" class="btn btn-warning">No Button Defined</button></slot>
+            <slot><button type="button" class="btn btn-dark">No Button Defined</button></slot>
           `
-        }
-        createRenderRoot() {
-          return this
         }
       }
       customElements.define('beadle-button', BeadleButton)
     </script>
   </head>
   <body>
-    <div style="margin: 20px 0 0 20px">
+    <div style="margin: 20px 0 0 0">
       <beadle-button>
         <button type="button" class="btn btn-primary">Primary</button>
         <button type="button" class="btn btn-secondary">Secondary</button>
@@ -70,8 +71,12 @@
       <button type="button" class="btn btn-dark">Dark</button>
       <button type="button" class="btn btn-link">Link</button>
     </div>
-    <beadle-button><p name="hello">Shut your pie hole!</p></beadle-button>
-    <beadle-button><button type="button" class="btn btn-dark">Submit</button></beadle-button>
-    <beadle-button></beadle-button>
+    <beadle-button>
+      <p name="hello">Shut your pie hole!</p>
+    </beadle-button>
+    <beadle-button>
+      <button type="button" class="btn btn-dark">Submit</button>
+    </beadle-button>
+    <beadle-button name="hello"></beadle-button>
   </body>
 </html>
