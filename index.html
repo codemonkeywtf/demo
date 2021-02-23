@@ -14,69 +14,135 @@
       integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
       crossorigin="anonymous"
     ></script>
-    <style></style>
 
+    <style></style>
     <script type="module">
       import { LitElement, html, css } from 'https://jspm.dev/lit-element@2'
-      class BeadleButton extends LitElement {
+
+      class CounterElement extends LitElement {
+        static get properties() {
+          return {
+            count: { type: Number },
+          }
+        }
+
         static get styles() {
           return css`
-            ::slotted(p) {
-              color: red;
+            * {
+              font-size: 200%;
             }
-            ::slotted(button) {
-              margin: 2px;
+
+            span {
+              width: 4rem;
+              display: inline-block;
+              text-align: center;
+            }
+
+            button {
+              width: 4rem;
+              height: 4rem;
+              border: none;
+              border-radius: 10px;
+              background-color: seagreen;
+              color: white;
             }
           `
         }
 
-        /*createRenderRoot() {
-          return this
-        }*/
+        constructor() {
+          super()
+          this.count = 0
+        }
+
+        inc() {
+          this.count++
+        }
+
+        dec() {
+          this.count--
+        }
 
         render() {
           return html`
-            <slot name="hello">
-              <p>Hello World!</p>
+            <slot @click="${this.dec}" name="minus">
+              <button>-</button>
             </slot>
-
-            <slot><button type="button" class="btn btn-dark">No Button Defined</button></slot>
+            <span>${this.count}</span>
+            <slot @click="${this.inc}" name="plus">
+              <button>+</button>
+            </slot>
           `
         }
+      }
+
+      customElements.define('counter-element', CounterElement)
+
+      class BeadleButton extends LitElement {
+        static get styles() {
+          return css`
+            .beadle-btn {
+              color: red;
+            }
+          `
+        }
+
+        _handleClick() {
+          console.log('clicked')
+        }
+
+        render() {
+          return html`
+            <div @click="${this._handleClick}">
+              <slot><button class="beadle-btn">Default</button></slot>
+            </div>
+            <slot name="bart">Hello</slot>
+          `
+        }
+        /*createRenderRoot() {
+          return this
+        }*/
       }
       customElements.define('beadle-button', BeadleButton)
     </script>
   </head>
   <body>
-    <div style="margin: 20px 0 0 0">
-      <beadle-button>
+    <div style="margin: 20px 0 0 20px">
+      <beadle-button name="bart">
         <button type="button" class="btn btn-primary">Primary</button>
+      </beadle-button>
+
+      <beadle-button>
         <button type="button" class="btn btn-secondary">Secondary</button>
+      </beadle-button>
+
+      <beadle-button>
         <button type="button" class="btn btn-success">Success</button>
+      </beadle-button>
+
+      <beadle-button>
         <button type="button" class="btn btn-danger">Danger</button>
         <button type="button" class="btn btn-warning">Warning</button>
         <button type="button" class="btn btn-info">Info</button>
         <button type="button" class="btn btn-light">Light</button>
-        <button type="button" class="btn btn-dark">Dark</button>
+        <button type="button" class="btn btn-dark" slot="bart">Dark</button>
         <button type="button" class="btn btn-link">Link</button>
       </beadle-button>
       <br /><br />
-      <button type="button" class="btn btn-primary">Primary</button>
-      <button type="button" class="btn btn-secondary">Secondary</button>
-      <button type="button" class="btn btn-success">Success</button>
-      <button type="button" class="btn btn-danger">Danger</button>
-      <button type="button" class="btn btn-warning">Warning</button>
-      <button type="button" class="btn btn-info">Info</button>
-      <button type="button" class="btn btn-light">Light</button>
-      <button type="button" class="btn btn-dark">Dark</button>
-      <button type="button" class="btn btn-link">Link</button>
     </div>
-    <beadle-button>
-      <p name="hello">Shut your pie hole!</p>
-    </beadle-button>
+
     <beadle-button>
       <button type="button" class="btn btn-dark">Submit</button>
     </beadle-button>
-    <beadle-button name="hello"></beadle-button>
+    <br />
+    <beadle-button></beadle-button>
+    <beadle-button slot="bart">Test</beadle-button>
+    <br />
+
+    <counter-element>
+      <span slot="minus"><button type="button" class="btn btn-danger">-</button></span>
+      <span slot="plus"><button type="button" class="btn btn-warning">+</button></span>
+    </counter-element>
+
+    <counter-element></counter-element>
   </body>
 </html>

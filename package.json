@@ -10,5 +10,8 @@
   "license": "BSD",
   "devDependencies": {
     "gh-pages": "^3.1.0"
+  },
+  "dependencies": {
+    "lit-element": "2"
   }
 }
